@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  TemplateBucketName:
+    Type: String
+    #Default: [bucket-name]
+    Default: my-ecs-fargate-cfn-template
+    
+  Prefix:
+    Type: String
+    Default: ecs-fargate-cfn
+    
+  HTTPPort:
+    Type: Number
+    Default: 80
+    
+  HTTPSPort:
+    Type: Number
+    Default: 443
+    
+  TaskCpu:
+    Type: Number
+    Default: 512
+    
+  TaskMemory:
+    Type: Number
+    Default: 1024
+
+
+Resources:
+  VPCStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "https://${TemplateBucketName}.s3.${AWS::Region}.amazonaws.com/${Prefix}/vpc.yaml"
+      Parameters:
+        AvailabilityZone1: a
+        AvailabilityZone2: d
+        CidrIp1: 10.0.1.0/24
+        CidrIp2: 10.0.2.0/24
+        HTTPPort: !Ref HTTPPort
+        Prefix: !Ref Prefix
+        VPCCidrBlock: 10.0.0.0/16
+
+  FargateStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn:
+      - VPCStack
+    Properties:
+      TemplateURL: !Sub "https://${TemplateBucketName}.s3.${AWS::Region}.amazonaws.com/${Prefix}/fargate.yaml"
+      Parameters:
+        ContainerSecurityGroup: !GetAtt VPCStack.Outputs.ContainerSecurityGroup
+        Prefix: !Ref Prefix
+        PublicSubnet1: !GetAtt VPCStack.Outputs.PublicSubnet1
+        PublicSubnet2: !GetAtt VPCStack.Outputs.PublicSubnet2
+        RepositoryName:
+          Fn::ImportValue: !Sub "${Prefix}-RepositoryName"
+        TaskCpu: !Ref TaskCpu
+        TaskMemory: !Ref TaskMemory
