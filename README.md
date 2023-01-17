@@ -102,3 +102,16 @@ After checking the resources for each stack, the information for the main resour
 
 You can see that there are two services running in the cluster.
 
+![](assets/ecs-cluster-2-services.png)
+
+Check the details of the tasks running on each service.
+
+![](assets/ecs-service.png)
+
+You can find PublicIP for each task
+
+![](assets/ecs-task.png)
+
+Finally access the IP, you'll see the page like this
+
+![](assets/task-access.png)
