@@ -58,11 +58,34 @@ cd task
 docker build -t ecs-fargate-cfn .
 
 docker tag ecs-fargate-cfn:latest ${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/ecs-fargate-cfn:latest
+```
 
+Check if the container image that you've built can work as expected
+
+```
+docker run -d -p 8888:80 ${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/ecs-fargate-cfn   
+curl localhost:8888
+```
+
+Here is an expected output:
+
+```
+<html>
+  <head>
+  </head>
+  <body>
+    <h1>ecs-fargate-cfn index.html</h1>
+  </body>
+</html>
+```
+
+Finally push the image to the ECR
+
+```bash
 docker push ${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/ecs-fargate-cfn:latest
 ```
 
-#### Create other stacks
+#### Create other stacks to run ECS fargate tasks
 
 ```bash
 aws cloudformation create-stack \
