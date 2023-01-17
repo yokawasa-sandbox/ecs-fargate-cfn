@@ -1,5 +1,5 @@
 # ecs-fargate-cfn
-test project for ecs fargate. The code in this repository is largely based on [awstut-fa](https://github.com/awstut-an-r/awstut-fa/tree/main/018).
+test project for ecs fargate. The code in this repository is largely based on [awstut-fa](https://github.com/awstut-an-r/awstut-fa/tree/main/018) (relevant [article](https://awstut.com/en/2022/01/25/introduction-to-fargate-with-cloudformation/)).
 
 ## Architecture
 
